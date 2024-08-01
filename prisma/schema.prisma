@@ -36,7 +36,7 @@ model Episode {
   name     String @unique
   air_date String
   episode  String
-  durarion String
+  duration String
 
   category      EpisodeCategory? @relation(fields: [categoryId], references: [epCategoryId]) //Season
   categoryId    Int?
