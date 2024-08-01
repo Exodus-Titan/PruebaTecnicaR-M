@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Character {
+  id       Int    @id
+  name     String @unique
+  origin   String
+  location String
+  gender   String
+  state    String
+
+  status      CharacterStatus?   @relation(fields: [statusId], references: [charStatusId])
+  statusId    Int?
+  category    CharacterCategory? @relation(fields: [categoryId], references: [charCategoryId]) //Species
+  categoryId  Int?
+  episodesIds Int[] //Eps en los que aparece el personajes
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Episode {
+  id       Int    @id
+  name     String @unique
+  air_date String
+  episode  String
+  durarion String
+
+  category      EpisodeCategory? @relation(fields: [categoryId], references: [epCategoryId]) //Season
+  categoryId    Int?
+  charactersIds Int[] //Personajes que aparecen en el episodio
+  EpisodeStatus EpisodeStatus?   @relation(fields: [statusId], references: [charStatusId])
+  statusId      Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CharacterStatus {
+  charStatusId Int         @id @default(autoincrement())
+  status       String
+  characters   Character[]
+}
+
+model CharacterCategory {
+  charCategoryId Int         @id @default(autoincrement())
+  subcategory    String
+  characters     Character[]
+}
+
+model EpisodeCategory {
+  epCategoryId Int       @id @default(autoincrement())
+  subcategory  String
+  episodes     Episode[]
+}
+
+model EpisodeStatus {
+  charStatusId Int       @id @default(autoincrement())
+  status       String
+  episodes     Episode[]
+}
