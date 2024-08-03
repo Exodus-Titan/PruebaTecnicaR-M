@@ -15,7 +15,7 @@ datasource db {
 
 model Character {
   id       Int    @id
-  name     String @unique
+  name     String
   origin   String
   location String
   gender   String
@@ -33,7 +33,7 @@ model Character {
 
 model Episode {
   id       Int    @id
-  name     String @unique
+  name     String
   air_date String
   episode  String
   duration String
